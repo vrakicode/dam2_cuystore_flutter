@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_flutter/widgets/button_login.dart';
 import 'package:proyecto_flutter/widgets/text_field_login.dart';
+import 'package:auth_buttons/auth_buttons.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -79,76 +81,27 @@ class _LoginPageState extends State<LoginPage> {
                 sizeText: 20,
                 fontWeight: FontWeight.bold,
               )
-            )
+            ),
+            const SizedBox(height: 40),
+            const Text('o iniciar sesion con tus perfiles sociales', 
+              style: TextStyle(fontSize: 18, 
+                fontWeight: FontWeight.bold, 
+                color: Colors.blue)
+            ),
+            const SizedBox(height: 40),
+            TwitterAuthButton(
+              onPressed: () {},
+            ),
+            FacebookAuthButton(
+              onPressed: () {},
+            ),
           ]),
+          
         ),
       )
-      /*
-      backgroundColor: Colors.grey[200],*/
     );
   }
 }
 
-class ButtonLogin extends StatelessWidget {
-  final String label;
-  final VoidCallback? onPressed;
-  final Color backgroundColor;
-  final Color textColor;
-  final double sizeText;
-  final FontWeight fontWeight;
-  const ButtonLogin({
-    super.key, 
-    required this.label, 
-    required this.onPressed, 
-    required this.backgroundColor, 
-    required this.textColor, 
-    required this.sizeText, required this.fontWeight,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Radio de los bordes
-        ),
-        backgroundColor: backgroundColor,
-      ),
-      child: Text(label,
-        style: TextStyle(color: textColor,
-          fontSize: sizeText,
-          fontWeight: fontWeight
-        ),
-        
-      ),
-    );
-  }
-}
-
-/*class TextFieldLogin extends StatelessWidget {
-  final String label;
-  final String hintText;
-  final bool obscureText;
-  
-  const TextFieldLogin({
-    super.key, 
-    required this.label, required this.hintText, 
-    required this.obscureText, 
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: label,
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Color.fromARGB(255, 8, 8, 8)),
-      ),
-    );
-  }
-}*/
 
 
