@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 50,
               child: ButtonLogin(label: 'Crear Nueva Cuenta',
                 onPressed: () {
-                      
+                  Navigator.pushNamed(context, '/registerPage');
                 },
                 backgroundColor: const Color.fromARGB(255, 221, 219, 219),
                 textColor: Colors.blue,
