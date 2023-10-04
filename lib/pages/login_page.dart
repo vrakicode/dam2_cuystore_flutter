@@ -27,13 +27,11 @@ class _LoginPageState extends State<LoginPage> {
       );
       User? user = userCredential.user;
 
-      if (user != null) {
-        print('Usuario inició sesión: ${user.uid}');
+      if (user != null) { 
         // ignore: use_build_context_synchronously
         Navigator.pushNamed(context, '/');
       }
     } catch (e) {
-      print('Error al iniciar sesión: $e');
       Fluttertoast.showToast(
         msg: "Error al iniciar sesión. Verifica tus credenciales.",
       );
