@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proyecto_flutter/widgets/button_login.dart';
 import 'package:proyecto_flutter/widgets/text_field_login.dart';
 import 'package:auth_buttons/auth_buttons.dart';
@@ -11,6 +13,32 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void signInWithEmailAndPassword() async {
+    String email = emailController.text;
+    String password = passwordController.text;
+
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User? user = userCredential.user;
+
+      if (user != null) {
+        print('Usuario inició sesión: ${user.uid}');
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamed(context, '/');
+      }
+    } catch (e) {
+      print('Error al iniciar sesión: $e');
+      Fluttertoast.showToast(
+        msg: "Error al iniciar sesión. Verifica tus credenciales.",
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,33 +54,35 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Column(children: [
             Image.asset('assets/images/logo.png', width: 250, height: 250),
-            const Column(
+            Column(
               children: [
-                Text('Iniciar Sesion', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-                SizedBox(height: 30),
-                Text('Hola, gusto en conocerte', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Color.fromARGB(255, 174, 173, 173))),
-                SizedBox(height: 30),
+                const Text('Iniciar Sesion', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 30),
+                const Text('Hola, gusto en conocerte', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Color.fromARGB(255, 174, 173, 173))),
+                const SizedBox(height: 30),
                 SizedBox(
                   width: 350,
                   child: TextFieldLogin(label: 'AppleID',
                   hintText: 'Ingrese su Apple ID', 
-                  obscureText: false,),
+                  obscureText: false,                 
+                  controller: emailController,),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 SizedBox(
                   width: 350,
                   child: TextFieldLogin(label: 'Password',
                   hintText: 'Ingrese su contraseña', 
-                  obscureText: true,),
+                  obscureText: true,
+                  controller: passwordController,),
                 ),
-                SizedBox(height: 30),
-                Text('¿Olvidaste tu Apple ID o tu contraseña?', 
+                const SizedBox(height: 30),
+                const Text('¿Olvidaste tu Apple ID o tu contraseña?', 
                   style: TextStyle(fontSize: 18, 
                     fontWeight: FontWeight.w600, 
                     color: Colors.blue
                   )
                 ),
-                SizedBox(height: 30),               
+                const SizedBox(height: 30),               
               ],
             ),
             SizedBox(
@@ -60,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 50, // Ancho deseado
               child: ButtonLogin(label: 'Iniciar Sesion',
                 onPressed: () {
-                      
+                  signInWithEmailAndPassword();
                 },
                 backgroundColor: Colors.white,
                 textColor: Colors.grey,
