@@ -3,11 +3,11 @@ class TextFieldLogin extends StatelessWidget {
   final String label;
   final String hintText;
   final bool obscureText;
-  
+  final TextEditingController? controller;
   const TextFieldLogin({
     super.key, 
     required this.label, required this.hintText, 
-    required this.obscureText, 
+    required this.obscureText, this.controller, 
   });
 
   @override
@@ -20,6 +20,7 @@ class TextFieldLogin extends StatelessWidget {
         hintText: hintText,
         hintStyle: const TextStyle(color: Color.fromARGB(255, 8, 8, 8)),
       ),
+      controller: controller,
     );
   }
 }

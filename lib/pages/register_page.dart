@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto_flutter/widgets/button_login.dart';
 import 'package:proyecto_flutter/widgets/text_field_login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterPage extends StatefulWidget {
   
@@ -12,7 +14,33 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  bool value = false;
+  bool termsChecked = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  Future<void> _registerWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User? user = userCredential.user;
+
+      if (user != null) {
+        if (!user.emailVerified) {
+          await user.sendEmailVerification();
+        }
+      }
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(context, '/loginPage');
+    } catch (e) {
+      
+      Fluttertoast.showToast(msg: e.toString());
+      emailController.text = '';
+      passwordController.text = '';
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,30 +69,33 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(height: 30),
-              const Center(
+              Center(
                 child: SizedBox(
                   width: 350,
                   child: TextFieldLogin(label: 'AppleID',
                   hintText: 'Ingrese su Apple ID', 
-                  obscureText: false,),
+                  obscureText: false,
+                  controller: emailController,
+                  ),
                 ),
               ),
               const SizedBox(height: 2),
-              const SizedBox(
+              SizedBox(
                 width: 350,
                 child: TextFieldLogin(label: 'Password',
                 hintText: 'Ingrese su contraseña', 
-                obscureText: true,),
+                obscureText: true,
+                controller: passwordController,),
               ),
               const SizedBox(height: 70),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                 Checkbox(
-                  value: value,
-                  onChanged: (bool? value) {
+                  value: termsChecked,
+                  onChanged: (bool? termsChecked) {
                     setState(() {
-                      this.value = value?? false;
+                      this.termsChecked = termsChecked?? false;
                     });
                   },
                 ),
@@ -106,7 +137,25 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: 50,
                 child: ButtonLogin(label: 'Crear Cuenta',
                   onPressed: () {
-                    
+                    if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty){
+                      if(termsChecked){
+                        String email = emailController.text;
+                        String password = passwordController.text;
+                        
+                        _registerWithEmailAndPassword(email, password);
+                        
+                      }else{
+                        Fluttertoast.showToast(
+                            msg: "Debes aceptar los terminos y condiciones",
+                            
+                        );
+                      }
+                    }else{
+                      Fluttertoast.showToast(
+                          msg: "Debes llenar todos los campos",
+
+                      );
+                    }     
                   },
                   backgroundColor: const Color.fromARGB(255, 221, 219, 219),
                   textColor: Colors.blue,
@@ -147,5 +196,11 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
     );
 
+  }
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
