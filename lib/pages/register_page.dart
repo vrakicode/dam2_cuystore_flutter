@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:proyecto_flutter/widgets/button_login.dart';
 import 'package:proyecto_flutter/widgets/text_field_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,10 +16,13 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormBuilderState>();
   bool termsChecked = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
   Future<void> _registerWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -79,7 +84,36 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 10,),
+              SizedBox(
+                width: 350,
+                child: TextFieldLogin(label: 'Nombre Completo',
+                hintText: 'Ingrese su nombre completo', 
+                obscureText: false,
+                controller: fullNameController,),
+              ),
+              const SizedBox(height: 10),
+              FormBuilder(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 350,
+                      child: FormBuilderDateTimePicker(
+                        name: 'dob',
+                        inputType: InputType.date,
+                        controller: dobController,
+                        decoration: const InputDecoration(
+                          labelText: 'Fecha de Nacimiento',
+                        ),
+                        validator: FormBuilderValidators.required(),
+                      ),
+                    ),
+                    const SizedBox(height: 7),
+                    // ... (existing code)
+                  ],
+                ),
+              ),
               SizedBox(
                 width: 350,
                 child: TextFieldLogin(label: 'Password',
@@ -143,7 +177,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         String password = passwordController.text;
                         
                         _registerWithEmailAndPassword(email, password);
-                        
+                        Fluttertoast.showToast(
+                            msg: "Cuenta creada con exito",                           
+                        );
                       }else{
                         Fluttertoast.showToast(
                             msg: "Debes aceptar los terminos y condiciones",
