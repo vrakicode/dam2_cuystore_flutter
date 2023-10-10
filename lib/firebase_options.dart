@@ -14,11 +14,13 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
-
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -26,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -44,16 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBczm3f7Wpea5QQliYZP7meDbiYEBNgvNE',
-    appId: '1:541389044760:web:f921d88b94f96c8a9c576d',
-    messagingSenderId: '541389044760',
-    projectId: 'proyectoflutter-31f87',
-    authDomain: 'proyectoflutter-31f87.firebaseapp.com',
-    storageBucket: 'proyectoflutter-31f87.appspot.com',
-    measurementId: 'G-RQTDLZXCXD',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBbTUZGdVSfXraniT5cjy5QhOOj-PtS6os',
     appId: '1:541389044760:android:9d0a4ce8fae275d89c576d',
@@ -69,14 +64,5 @@ class DefaultFirebaseOptions {
     projectId: 'proyectoflutter-31f87',
     storageBucket: 'proyectoflutter-31f87.appspot.com',
     iosBundleId: 'com.example.proyectoFlutter',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD26LJnBH76ZVv_vvgCBb-UcGY0uDJr_EA',
-    appId: '1:541389044760:ios:7fca56ac33b48d489c576d',
-    messagingSenderId: '541389044760',
-    projectId: 'proyectoflutter-31f87',
-    storageBucket: 'proyectoflutter-31f87.appspot.com',
-    iosBundleId: 'com.example.proyectoFlutter.RunnerTests',
   );
 }
