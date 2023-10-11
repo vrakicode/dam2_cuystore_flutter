@@ -18,11 +18,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute:'/loginPage',
+      theme: ThemeData.light(useMaterial3: true),
+      initialRoute:'/index',
       routes: {
         '/loginPage':(context) => const LoginPage(),
         '/registerPage':(context) => const RegisterPage(),
         '/':(context) => const IndexPage(),
+        '/index':(context) => const IndexPage(),
       },
     );
   }
