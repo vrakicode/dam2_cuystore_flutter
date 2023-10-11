@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -36,8 +37,13 @@ class _RegisterPageState extends State<RegisterPage> {
           await user.sendEmailVerification();
         }
       }
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, '/loginPage');
+      await FirebaseFirestore.instance.collection('users').doc(user?.uid).set({
+        'fullName': fullNameController.text,
+        'email': email,
+        'dob': dobController.text,
+      });
+      
+      
     } catch (e) {
       
       Fluttertoast.showToast(msg: e.toString());
@@ -180,6 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         Fluttertoast.showToast(
                             msg: "Cuenta creada con exito",                           
                         );
+                        Navigator.pushNamed(context, '/loginPage');
                       }else{
                         Fluttertoast.showToast(
                             msg: "Debes aceptar los terminos y condiciones",
