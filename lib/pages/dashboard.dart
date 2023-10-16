@@ -11,8 +11,12 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text('Productos'),
         centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
+      body: Container(
+        
       ),
     );
   }

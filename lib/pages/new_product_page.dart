@@ -7,9 +7,9 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:proyecto_flutter/services/firebase_service.dart';
-
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 class NewProductPage extends StatefulWidget {
-  
+   
   const NewProductPage({super.key});
 
   @override
@@ -17,6 +17,7 @@ class NewProductPage extends StatefulWidget {
 }
 
 class _NewProductPageState extends State<NewProductPage> {
+  
   final FirebaseService _firebaseService = FirebaseService();
   final ImagePicker _picker = ImagePicker();
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
@@ -32,10 +33,12 @@ class _NewProductPageState extends State<NewProductPage> {
 
       final Map<String, dynamic> formData = form.value;
       List<String> imageUrls = await _firebaseService.subirImagenes(selectedImages);
-
+      ProgressDialog pd = ProgressDialog(context: context);
+      pd.show(max: 100, msg:'Subiendo producto...');
       await _firebaseService.agregarProducto(formData, imageUrls, selectedCategories);
       Fluttertoast.showToast(msg: 'Producto agregado');
       form.reset();
+      pd.close();
       selectedCategories = [];
       selectedImages = [];
       descriptionController.clear();
@@ -218,21 +221,21 @@ class _NewProductPageState extends State<NewProductPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text("Elegir una opción"),
+                          title: const Text("Elegir una opción"),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               ListTile(
-                                leading: Icon(Icons.camera),
-                                title: Text('Tomar una foto'),
+                                leading: const Icon(Icons.camera),
+                                title: const Text('Tomar una foto'),
                                 onTap: () {
                                   Navigator.pop(context);
                                   _pickImageFromSource(ImageSource.camera);
                                 },
                               ),
                               ListTile(
-                                leading: Icon(Icons.image),
-                                title: Text('Elegir de la galería'),
+                                leading: const Icon(Icons.image),
+                                title: const Text('Elegir de la galería'),
                                 onTap: () {
                                   Navigator.pop(context);
                                   _pickImageFromSource(ImageSource.gallery);
@@ -252,13 +255,11 @@ class _NewProductPageState extends State<NewProductPage> {
                   onPressed: (){
                     try {
                       _agregarProducto();
-                      
-                      Navigator.pushNamed(context, '/index');
                     } catch (error) {
                       Fluttertoast.showToast(msg: error.toString());
                     }
                   },
-                  child: Text('Agregar Producto'),
+                  child: const Text('Agregar Producto'),
                 ),
 
                 const SizedBox(height:30 ,),
