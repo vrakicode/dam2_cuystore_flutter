@@ -108,6 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: FormBuilderDateTimePicker(
+                        
                         name: 'dob',
                         inputType: InputType.date,
                         controller: dobController,

@@ -86,11 +86,11 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.blue
                     )
                   ),
-                  const SizedBox(height: 30),               
+                                 
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            
             Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 iconBackground: Colors.white,
-                margin: const EdgeInsets.only(top: 10, bottom: 10),
+                margin: const EdgeInsets.only(top: 10, bottom: 70),
               ),
             ),
           ]),

@@ -34,8 +34,11 @@ class _NewProductPageState extends State<NewProductPage> {
       List<String> imageUrls = await _firebaseService.subirImagenes(selectedImages);
 
       await _firebaseService.agregarProducto(formData, imageUrls, selectedCategories);
-
-      
+      Fluttertoast.showToast(msg: 'Producto agregado');
+      form.reset();
+      selectedCategories = [];
+      selectedImages = [];
+      descriptionController.clear();
     }
   }
   @override
@@ -55,7 +58,7 @@ class _NewProductPageState extends State<NewProductPage> {
       MultiSelectItem('Automóviles y Motocicletas', 'Automóviles y Motocicletas'),
       MultiSelectItem('Inmuebles', 'Inmuebles'),
       MultiSelectItem('Servicios', 'Servicios'),
-      MultiSelectItem('Electrónica de Consumo', 'Electrónica de Consumo'),
+      
     ];
   }
 
@@ -89,6 +92,7 @@ class _NewProductPageState extends State<NewProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Vender Producto',
         style: TextStyle(fontSize: 30),),
@@ -122,6 +126,7 @@ class _NewProductPageState extends State<NewProductPage> {
                   SizedBox(
                     width: 350,
                     child: FormBuilderTextField(
+                      keyboardType: TextInputType.number,
                       name: 'precioProducto',
                       decoration: const InputDecoration(
                         labelText: 'Precio del Producto',
@@ -138,6 +143,7 @@ class _NewProductPageState extends State<NewProductPage> {
                   SizedBox(
                     width: 350,
                     child: FormBuilderTextField(
+                      keyboardType: TextInputType.number,
                       name: 'stockProducto',
                       decoration: const InputDecoration(
                         labelText: 'Stock del Producto',
@@ -244,7 +250,8 @@ class _NewProductPageState extends State<NewProductPage> {
                     onPressed: (){
                       try {
                         _agregarProducto();
-                        Fluttertoast.showToast(msg: 'Producto agregado');
+                        
+                        Navigator.pushNamed(context, '/index');
                       } catch (error) {
                         Fluttertoast.showToast(msg: error.toString());
                       }

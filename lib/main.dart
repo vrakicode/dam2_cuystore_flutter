@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:proyecto_flutter/firebase_options.dart';
+import 'package:proyecto_flutter/pages/dashboard.dart';
 import 'package:proyecto_flutter/pages/index.dart';
 import 'package:proyecto_flutter/pages/login_page.dart';
 import 'package:proyecto_flutter/pages/register_page.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/loginPage': (context) => const LoginPage(),
         '/registerPage': (context) => const RegisterPage(),
         '/index': (context) => const IndexPage(),
+        '/dashboard':(context) => const Dashboard(),
       },
       onGenerateRoute: (settings) {
         // Puedes manejar rutas adicionales aquí si es necesario
