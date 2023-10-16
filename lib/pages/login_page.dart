@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (user != null) { 
         // ignore: use_build_context_synchronously
-        Navigator.pushNamed(context, '/');
+        Navigator.pushNamed(context, '/index');
       }
     } catch (e) {
       Fluttertoast.showToast(
@@ -40,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -50,55 +51,63 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         child: Center(
-          child: Column(children: [
-            Image.asset('assets/images/logo.png', width: 250, height: 250),
-            Column(
-              children: [
-                const Text('Iniciar Sesion', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 30),
-                const Text('Hola, gusto en conocerte', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Color.fromARGB(255, 174, 173, 173))),
-                const SizedBox(height: 30),
-                SizedBox(
-                  width: 350,
-                  child: TextFieldLogin(label: 'AppleID',
-                  hintText: 'Ingrese su Apple ID', 
-                  obscureText: false,                 
-                  controller: emailController,),
-                ),
-                const SizedBox(height: 2),
-                SizedBox(
-                  width: 350,
-                  child: TextFieldLogin(label: 'Password',
-                  hintText: 'Ingrese su contraseña', 
-                  obscureText: true,
-                  controller: passwordController,),
-                ),
-                const SizedBox(height: 30),
-                const Text('¿Olvidaste tu Apple ID o tu contraseña?', 
-                  style: TextStyle(fontSize: 18, 
-                    fontWeight: FontWeight.w600, 
-                    color: Colors.blue
-                  )
-                ),
-                const SizedBox(height: 30),               
-              ],
-            ),
-            SizedBox(
-              width: 350,
-              height: 50, // Ancho deseado
-              child: ButtonLogin(label: 'Iniciar Sesion',
-                onPressed: () {
-                  signInWithEmailAndPassword();
-                },
-                backgroundColor: Colors.white,
-                textColor: Colors.grey,
-                sizeText: 20,
-                fontWeight: FontWeight.bold,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [                     
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/logo.jpg', width: 200, height: 200),
+                  const Text('Iniciar Sesion', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 30),
+                  const Text('Hola, gusto en conocerte', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Color.fromARGB(255, 174, 173, 173))),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: TextFieldLogin(label: 'Correo electronico',
+                    hintText: 'Ingrese su correo', 
+                    obscureText: false,                 
+                    controller: emailController,),
+                  ),
+                  const SizedBox(height: 7),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: TextFieldLogin(label: 'Password',
+                    hintText: 'Ingrese su contraseña', 
+                    obscureText: true,
+                    controller: passwordController,),
+                  ),
+                  const SizedBox(height: 30),
+                  const Text('¿Olvidaste tu contraseña?', 
+                    style: TextStyle(fontSize: 18, 
+                      fontWeight: FontWeight.w600, 
+                      color: Colors.blue
+                    )
+                  ),
+                  const SizedBox(height: 30),               
+                ],
               ),
             ),
             const SizedBox(height: 30),
+            Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: 50,
+                child: ButtonLogin(
+                  label: 'Iniciar Sesión',
+                  onPressed: () {
+                    signInWithEmailAndPassword();
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.grey,
+                  sizeText: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            const SizedBox(height: 30),
             SizedBox(
-              width: 350,
+              width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               child: ButtonLogin(label: 'Crear Nueva Cuenta',
                 onPressed: () {
@@ -110,18 +119,28 @@ class _LoginPageState extends State<LoginPage> {
                 fontWeight: FontWeight.bold,
               )
             ),
-            const SizedBox(height: 40),
-            const Text('o iniciar sesion con tus perfiles sociales', 
+            const SizedBox(height: 20),
+            const Text('o iniciar sesion con ', 
               style: TextStyle(fontSize: 18, 
                 fontWeight: FontWeight.bold, 
                 color: Colors.blue)
             ),
-            const SizedBox(height: 40),
-            TwitterAuthButton(
-              onPressed: () {},
-            ),
-            FacebookAuthButton(
-              onPressed: () {},
+            
+            GoogleAuthButton(
+              onPressed: () {
+                Fluttertoast.showToast(
+                  msg: "Funcionalidad no implementada.",
+                );
+              },
+              
+              style: AuthButtonStyle(
+                iconSize: 30,
+                buttonType: AuthButtonType.icon,
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: 50,
+                iconBackground: Colors.white,
+                margin: const EdgeInsets.only(top: 10, bottom: 10),
+              ),
             ),
           ]),
           

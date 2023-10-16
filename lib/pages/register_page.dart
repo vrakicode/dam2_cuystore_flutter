@@ -11,12 +11,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 class RegisterPage extends StatefulWidget {
   
   const RegisterPage({super.key});
-
+  
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  
   final _formKey = GlobalKey<FormBuilderState>();
   bool termsChecked = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -24,6 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   Future<void> _registerWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -69,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const Align(
                 alignment: Alignment.topLeft, // Alineación en la esquina superior izquierda
                 child: Padding(
-                  padding: EdgeInsets.only(top: 90, left: 63), // Añadido padding izquierdo
+                  padding: EdgeInsets.only(top: 90, left: 55), // Añadido padding izquierdo
                   child: Text(
                     'Crear Cuenta',
                     style: TextStyle(
@@ -82,9 +84,9 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 30),
               Center(
                 child: SizedBox(
-                  width: 350,
-                  child: TextFieldLogin(label: 'AppleID',
-                  hintText: 'Ingrese su Apple ID', 
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: TextFieldLogin(label: 'Correo Electronico',
+                  hintText: 'Ingrese su correo', 
                   obscureText: false,
                   controller: emailController,
                   ),
@@ -92,7 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 10,),
               SizedBox(
-                width: 350,
+                width: MediaQuery.of(context).size.width * 0.8,
                 child: TextFieldLogin(label: 'Nombre Completo',
                 hintText: 'Ingrese su nombre completo', 
                 obscureText: false,
@@ -104,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     SizedBox(
-                      width: 350,
+                      width: MediaQuery.of(context).size.width * 0.8,
                       child: FormBuilderDateTimePicker(
                         name: 'dob',
                         inputType: InputType.date,
@@ -121,11 +123,21 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                width: 350,
-                child: TextFieldLogin(label: 'Password',
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: TextFieldLogin(label: 'Contraseña',
                 hintText: 'Ingrese su contraseña', 
                 obscureText: true,
                 controller: passwordController,),
+              ),
+              const SizedBox(height: 10,),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: TextFieldLogin(
+                  label: 'Confirmar Contraseña',
+                  hintText: 'Confirme su contraseña',
+                  obscureText: true,
+                  controller: confirmPasswordController,
+                ),
               ),
               const SizedBox(height: 70),
               Row(
@@ -140,65 +152,76 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
                 
-                RichText(
-                  text: TextSpan(
-                    text: 'Acepto los ',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.75,
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Acepto los ',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'términos y condiciones',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                            },
+                        ),
+                        const TextSpan(
+                          text: '\nademás de nuestra ',
+                        ),
+                        const TextSpan(
+                          text: 'política de privacidad',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
                     ),
-                    children: [
-                      TextSpan(
-                        text: 'términos y condiciones',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                          },
-                      ),
-                      const TextSpan(
-                        text: '\nademás de nuestra ',
-                      ),
-                      const TextSpan(
-                        text: 'política de privacidad',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
                   ),
                 ),
               ],
               ),
               const SizedBox(height: 50),
               SizedBox(
-                width: 350,
+                width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 child: ButtonLogin(label: 'Crear Cuenta',
                   onPressed: () {
-                    if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty){
-                      if(termsChecked){
-                        String email = emailController.text;
-                        String password = passwordController.text;
+                    if (emailController.text.isNotEmpty &&
+                        passwordController.text.isNotEmpty &&
+                        confirmPasswordController.text.isNotEmpty) {
+                          if (termsChecked) {
+                            if (passwordController.text == confirmPasswordController.text) {
                         
-                        _registerWithEmailAndPassword(email, password);
-                        Fluttertoast.showToast(
-                            msg: "Cuenta creada con exito",                           
-                        );
-                        Navigator.pushNamed(context, '/loginPage');
-                      }else{
-                        Fluttertoast.showToast(
-                            msg: "Debes aceptar los terminos y condiciones",
-                            
-                        );
-                      }
-                    }else{
+                              String email = emailController.text;
+                              String password = passwordController.text;
+        
+                              _registerWithEmailAndPassword(email, password);
+                              Fluttertoast.showToast(
+                                msg: "Cuenta creada con exito",
+                              );
+                              Navigator.pushNamed(context, '/loginPage');
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: "Las contraseñas no coinciden",
+                              );
+                            }
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "Debes aceptar los terminos y condiciones",
+                            );
+                          }
+                      
+                    } else {
                       Fluttertoast.showToast(
-                          msg: "Debes llenar todos los campos",
-
+                        msg: "Debes llenar todos los campos",
                       );
-                    }     
+                    }  
                   },
                   backgroundColor: const Color.fromARGB(255, 221, 219, 219),
                   textColor: Colors.blue,
@@ -244,6 +267,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 }
