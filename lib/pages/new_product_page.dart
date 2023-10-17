@@ -29,19 +29,32 @@ class _NewProductPageState extends State<NewProductPage> {
   Future<void> _agregarProducto() async {
     final form = _formKey.currentState;
     if (form != null && form.validate()) {
+      ProgressDialog pd = ProgressDialog(context: context);
+      pd.show(
+        max: 100, 
+        msg:'Subiendo producto...',
+        completed: Completed(
+          completedMsg: 'Producto agregado',
+          completionDelay: 2500
+        )
+      );
       form.save();
 
       final Map<String, dynamic> formData = form.value;
       List<String> imageUrls = await _firebaseService.subirImagenes(selectedImages);
-      ProgressDialog pd = ProgressDialog(context: context);
-      pd.show(max: 100, msg:'Subiendo producto...');
-      await _firebaseService.agregarProducto(formData, imageUrls, selectedCategories);
-      Fluttertoast.showToast(msg: 'Producto agregado');
-      form.reset();
-      pd.close();
+      
+      try {
+        await _firebaseService.agregarProducto(formData, imageUrls, selectedCategories);
+        Fluttertoast.showToast(msg: 'Producto agregado');
+      } finally {
+        pd.close();
+      }
+      form.reset();     
       selectedCategories = [];
       selectedImages = [];
       descriptionController.clear();
+      
+      pd.close();
     }
   }
   @override
@@ -140,6 +153,7 @@ class _NewProductPageState extends State<NewProductPage> {
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
+                      FormBuilderValidators.numeric()
                     ]),
                   ),
                 ),
@@ -157,6 +171,7 @@ class _NewProductPageState extends State<NewProductPage> {
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
+                      FormBuilderValidators.numeric()
                     ]),
                   ),
                 ),

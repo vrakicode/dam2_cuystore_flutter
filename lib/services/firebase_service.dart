@@ -37,4 +37,33 @@ class FirebaseService {
 
     return imageUrls;
   }
+  void toggleFavorite(String productId, bool isFavorite) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    if (isFavorite) {
+      await users.doc(userId).update({
+        'favorites': FieldValue.arrayUnion([productId]),
+      });
+    } else {
+      await users.doc(userId).update({
+        'favorites': FieldValue.arrayRemove([productId]),
+      });
+    }
+  }
+  Future<bool> isProductFavorite(String productId) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      var favoriteSnapshot = await FirebaseFirestore.instance
+          .collection('favoritos')
+          .doc(user.uid)
+          .collection('productos')
+          .doc(productId)
+          .get();
+
+      return favoriteSnapshot.exists;
+    }
+
+    return false;
+  }
 }
