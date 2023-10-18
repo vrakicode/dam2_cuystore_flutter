@@ -7,6 +7,7 @@ import 'package:proyecto_flutter/pages/dashboard.dart';
 import 'package:proyecto_flutter/pages/index.dart';
 import 'package:proyecto_flutter/pages/login_page.dart';
 import 'package:proyecto_flutter/pages/register_page.dart';
+import 'package:proyecto_flutter/widgets/splash_screen.dart';
 FirebaseAuth _auth = FirebaseAuth.instance;
 void main() async {
   
@@ -28,8 +29,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.light(useMaterial3: true),
-      initialRoute: _auth.currentUser != null ? '/index' : '/loginPage',
+      initialRoute: '/splash',
       routes: {
+        '/splash' : (context) => const SplashScreen(),
         '/loginPage': (context) => const LoginPage(),
         '/registerPage': (context) => const RegisterPage(),
         '/index': (context) => const IndexPage(),

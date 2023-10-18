@@ -42,8 +42,9 @@ class _DashboardState extends State<Dashboard> {
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: MediaQuery.of(context).size.width > 600 ? 4 : 2, // 2 columnas en dispositivos pequeños, 4 en dispositivos más grandes
-                crossAxisSpacing: 20.0,
+                crossAxisSpacing: 10.0,
                 mainAxisSpacing: 10.0,
+                childAspectRatio: 0.78,
               ),
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (BuildContext context, int index) {
@@ -52,6 +53,7 @@ class _DashboardState extends State<Dashboard> {
                 var productImageURL = product['imagenes'][0]; // Asume que tienes una URL de imagen almacenada en Firebase
                 var productPrice = product['precio'];
                 return Container(
+                  
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white),
                     color: Colors.indigo[50],
@@ -60,22 +62,25 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Image.network(
                         productImageURL,
-                        height: 150.0,
-                        width: 160.0,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width *0.4,
                         fit: BoxFit.cover,
                       ),
                       Text(
                         productName,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20
+                          fontSize: 18, // Ajusta el tamaño de la fuente
                         ),
+                        maxLines: 2, // Limita a 2 líneas
+                        overflow: TextOverflow.ellipsis, // Agrega puntos suspensivos si el texto es muy largo
                       ),
-                      Text('S/. $productPrice',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20
-                      ),
+                      Text(
+                        'S/. $productPrice',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18, // Ajusta el tamaño de la fuente
+                        ),
                       ),
                     ],
                   ),
