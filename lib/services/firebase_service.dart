@@ -51,19 +51,18 @@ class FirebaseService {
       });
     }
   }
-  Future<bool> isProductFavorite(String productId) async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      var favoriteSnapshot = await FirebaseFirestore.instance
-          .collection('favoritos')
-          .doc(user.uid)
+
+  static Future<List<DocumentSnapshot>> searchProductos(String searchText) async {
+    try {
+      String palabra = searchText;
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('productos')
-          .doc(productId)
+          .where('nombre', isEqualTo: palabra)
           .get();
-
-      return favoriteSnapshot.exists;
+      return snapshot.docs;
+    } catch (e) {
+      
+      return [];
     }
-
-    return false;
   }
 }
